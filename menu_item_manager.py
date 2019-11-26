@@ -4,7 +4,7 @@ from abstract_menu_item import AbstractMenuItem
 from menu_item_stats import MenuItemStats
 from food import Food
 from drink import Drink
-
+from datetime import datetime
 
 
 class MenuItemManager:
@@ -12,7 +12,6 @@ class MenuItemManager:
     """ creates menu item manager """    
     def __init__(self, restaurant_name, db_name):
 
-        self._next_available_id = int(0)
         self._restaurant_name = restaurant_name
         if db_name is None or db_name == "":
             raise ValueError("DB Name cannot be undefined")
@@ -25,16 +24,21 @@ class MenuItemManager:
         if menu_item is None or not isinstance(menu_item, AbstractMenuItem):
             raise ValueError("Invalid Menu Item.")
 
-        if self.menu_exist(menu_item.id):
-            raise ValueError("mene item with given id already exists.")
-
-        self._next_available_id = self._next_available_id + 1
-        menu_item.set_id(self._next_available_id)
+        # self._next_available_id = self._next_available_id + 1
+        # menu_item.set_id(self._next_available_id)
+        
+        # if self.menu_exist(id):
+        #     raise ValueError("mene item with given id already exists.")
 
         session = self._db_session()        
         session.add(menu_item)
         session.commit()
         session.close()
+
+
+
+
+
 
     def remove_menu_item(self, id):
         """ removes menu item if it exists """

@@ -18,17 +18,16 @@ def add_item():
     try:
         for item in content:
             if content['type'] == 'food':
-                menu_item = Food(content['menu_item_name'], content['menu_item_no'], (content['date_added']), content['price'],
+                menu_item = Food(content['menu_item_name'], content['menu_item_no'], datetime.strptime(content['date_added'], '%Y-%m-%d'), content['price'],
                  content['calories'], content['cuisine_country'], content['main_ingredient'], content['portion_size'], content['is_vegetarian'])
     
             elif content['type'] == 'drink':
-                menu_item = Drink(content['menu_item_name'], content['menu_item_no'], content['date_added'], content['price'], content['calories'], content['manufacturer'], content['size'], content['is_fizzy'], content['is_hot'])
+                menu_item = Drink(content['menu_item_name'], content['menu_item_no'], datetime.strptime(content['date_added'], '%Y-%m-%d'), content['price'], content['calories'], content['manufacturer'], content['size'], content['is_fizzy'], content['is_hot'])
 
 
         menu_item_manager.add_menu_item(menu_item)
 
         response = app.response_class(
-            response= str(menu_item.get_id()), 
             status= 200
         )
 

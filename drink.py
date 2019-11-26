@@ -5,33 +5,32 @@ from sqlalchemy import Column, String, Integer, Float, DateTime
 class Drink(AbstractMenuItem):
     """ creates drink """
 
-
+    MENU_ITEM_TYPE = "drink"
     manufacturer = Column(String(100))
     size = Column(String(20))
     is_fizzy = Column(Integer)
     is_hot = Column(Integer)
 
     def __init__(self, menu_item_name, menu_item_no, date_added, price, calories, manufacturer, size, is_fizzy, is_hot):
-        super().__init__( menu_item_name, menu_item_no, date_added, price, calories)
-        self._manufacturer= manufacturer
-        self._size= size
-        self._is_fizzy= is_fizzy
-        self._is_hot= is_hot
+        super().__init__( menu_item_name, menu_item_no, date_added, price, calories, Drink.MENU_ITEM_TYPE)
+        self.manufacturer= manufacturer
+        self.size= size
+        self.is_fizzy= is_fizzy
+        self.is_hot= is_hot
 
 
     def to_dict(self):
         """Returns a dictionary representation of menu item of type food"""
         item_dict = {
-            "id": self.get_id(),
-            "menu_item_name": self._menu_item_name,
-            "menu_item_no": self._menu_item_no,
-            "date_added": self._date_added.strftime("%Y-%m-%d"),
-            "price": self._price,
-            "calories": self._calories,
-            "manufacturer": self._manufacturer,
-            "size": self._size,
-            "is_fizzy": self._is_fizzy,
-            "is_hot": self._is_hot,
+            "menu_item_name": self.menu_item_name,
+            "menu_item_no": self.menu_item_no,
+            "date_added": self.date_added.strftime("%Y-%m-%d"),
+            "price": self.price,
+            "calories": self.calories,
+            "manufacturer": self.manufacturer,
+            "size": self.size,
+            "is_fizzy": self.is_fizzy,
+            "is_hot": self.is_hot,
             "type": self.get_type()
         }
         return item_dict
@@ -48,14 +47,14 @@ class Drink(AbstractMenuItem):
     
     def get_type(self):
         """ returns menu item type """
-        MENU_ITEM_TYPE = "drink" 
-        return MENU_ITEM_TYPE
+        return Drink.MENU_ITEM_TYPE
+
 
     def get_manufacturer(self):
-        return self._manufacturer
+        return self.manufacturer
 
     def get_size(self):
-        return self._size
+        return self.size
 
 
 
