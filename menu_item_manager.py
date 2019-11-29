@@ -91,17 +91,43 @@ class MenuItemManager:
         return menu_item
     
     def get_all_by_type(self, item_type):
-        """ returns all menu items by type """
-        pass
+        session = self._db_session()
+        menu = session.query(AbstractMenuItem).filter(AbstractMenuItem.type == item_type).all()
+
+        menu_list = []
+
+        for i in menu:
+            menu_list.append(i.menu_item_name)
+
+        return menu_list
 
     def get_all(self):
         """ returns all items """
-        pass
+        session = self._db_session()
+        total = 0
+        menu = session.query(AbstractMenuItem).all()
+        menu_list =[]
+        for i in menu:
+            menu_list.append(i.menu_item_name)
+
+
+        session.close()
+
+        return menu_list
+
 
     def update(self, menu_item):
         """ updates menu item """
-        pass
-            
+
+        session = self._db_session()
+        update_menuitem = session.query(AbstractMenuItem).filter(AbstractMenuItem.id == menu_item.get_id()).first()
+
+        if update_menuitem is None:
+            raise ValueError("Menu item not matched")
+        else:
+
+
+
     def get_menu_item_stats(self):
 
         """ gets menu item stats """
@@ -121,25 +147,16 @@ class MenuItemManager:
 
         for menu_item in menu:
             total_num_menu_items += 1
-            if menu_item.get_type() == "food":
+            if menu_item.type == "food":
                 num_foods += 1
-            if menu_item.get_type() == "drink":
-                num_drinks += 1
-
-        for menu_item in menu:
-            if menu_item.get_type() == "drink":
-                item_price = menu_item.get_price()
-                drink_price_list.append(item_price)
-                avg_price_drink = sum(drink_price_list)/len(drink_price_list)
-                
-
-
-
-        for menu_item in menu:
-            if menu_item.get_type() == "food":
-                item_price = menu_item.get_price()
+                item_price = menu_item.price
                 food_price_list.append(item_price)
-                avg_price_food = sum(food_price_list)/len(food_price_list)
+                avg_price_food = sum(food_price_list) / len(food_price_list)
+            if menu_item.type == "drink":
+                num_drinks += 1
+                item_price = menu_item.price
+                drink_price_list.append(item_price)
+                avg_price_drink = sum(drink_price_list) / len(drink_price_list)
 
         stats = MenuItemStats(total_num_menu_items,num_foods, num_drinks, avg_price_food, avg_price_drink)
 
