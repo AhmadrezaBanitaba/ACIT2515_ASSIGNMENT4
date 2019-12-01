@@ -226,14 +226,16 @@ def update_menu_item(id):
 
     return response
 
-@app.route('/menu/menu_items/<string:id>', methods=['DELETE'])
-def remove_menu_item(id):
+@app.route('/menu/menu_items/delete', methods=['DELETE'])
+def remove_menu_item():
     """ deletes a menu item based on the id """
 
+    content = request.json
     try:
-        if menu_item_manager.menu_exist(int(id)) is True:
+        id = int(content['id'])
+        if menu_item_manager.menu_exist(id) is True:
 
-            menu_item_manager.remove_menu_item(int(id))  
+            menu_item_manager.remove_menu_item(id)  
 
             response = app.response_class(
 

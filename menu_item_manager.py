@@ -124,7 +124,7 @@ class MenuItemManager:
 
         if update_menuitem is None:
             raise ValueError("Menu item not matched")
-        else:
+
 
 
 
