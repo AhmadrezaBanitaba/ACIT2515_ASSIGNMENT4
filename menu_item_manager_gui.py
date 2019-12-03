@@ -1,8 +1,10 @@
 import tkinter as tk
+from tkinter import messagebox
 import requests
 from add_food_popup import AddFoodPopup
 from add_drink_popup import AddDrinkPopup
 from remove_menu_item_popup import RemoveMenuItemPopup
+from update_food_popup import UpdateMenuItemPopup
 
 class MainAppController(tk.Frame):
     """ Main Application for GUI """
@@ -13,11 +15,13 @@ class MainAppController(tk.Frame):
 
         tk.Label(self, text="Menu Items").grid(row=1, column=2)
         self._menu_items_listbox = tk.Listbox(self, width= 120)
+        self._menu = []
         self._menu_items_listbox.grid(row=2, column=1, columnspan=5)
 
         tk.Button(self, text="Add Food", command=self._add_food).grid(row=3, column=1)
         tk.Button(self, text="Add Drink", command=self._add_drink).grid(row=3, column=2)
         tk.Button(self, text="Remove Menu Item", command=self._remove_menu_item,  fg="red").grid(row=3, column=3)
+        tk.Button(self, text="Update Food Item", command=self._update_food).grid(row=3, column=4)
         tk.Button(self, text="Quit", command=self._quit_callback).grid(row=4, column=2)
 
         self._update_menu_items_list()
@@ -33,6 +37,14 @@ class MainAppController(tk.Frame):
         self._popup_win.destroy()
         self._update_menu_items_list()
         self._menu_item_stats()
+
+
+    def _update_food(self):
+        """ Updates the selected food """
+        self._popup_win = tk.Toplevel()
+        self._popup = UpdateMenuItemPopup(self._popup_win, self._close_food_cb)
+
+
 
     def _remove_menu_item(self):
         """ Remove Menu Item Popup """

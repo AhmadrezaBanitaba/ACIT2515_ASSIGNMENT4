@@ -192,14 +192,17 @@ def get_repiarstats():
 
 
 
-
 @app.route('/menu/menu_items/<int:id>', methods = ['PUT'])
 def update_menu_item(id):
     """ updates an existing menu item """
     content = request.json
 
-    if menu_item_manager.menu_exist(id) is True:
-        
+    if id <= 0:
+        response = app.response_class(
+            status=400
+        )
+        return response
+    try:
         for item in content:
             if content['type'] == 'food':
                 menu_item = Food(content['menu_item_name'], content['menu_item_no'], (content['date_added']), content['price'],
@@ -211,20 +214,28 @@ def update_menu_item(id):
                 menu_item.set_id(id)
                 menu_item_manager.update(menu_item)
 
-        a = menu_item_manager.get_all_by_type(content['type'])
 
         response = app.response_class(
-            status=200,
-            mimetype='/application/json'
-
+            status=200
         )
-    else:
+    except ValueError as e:
+        status_code = 400
+        if str(e) == "Menu Item does not exist":
+            status_code = 404
+
         response = app.response_class(
-            status= 404,
-            response= 'device with given id does not exist'
+            response=str(e),
+            status=status_code
         )
 
     return response
+
+
+
+
+
+
+
 
 @app.route('/menu/menu_items/delete', methods=['DELETE'])
 def remove_menu_item():

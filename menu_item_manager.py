@@ -119,12 +119,20 @@ class MenuItemManager:
     def update(self, menu_item):
         """ updates menu item """
 
+            
+        if menu_item is None or not isinstance(menu_item, AbstractMenuItem):
+            raise ValueError("Invalid Menu Item Object")
+        
         session = self._db_session()
-        update_menuitem = session.query(AbstractMenuItem).filter(AbstractMenuItem.id == menu_item.get_id()).first()
 
-        if update_menuitem is None:
-            raise ValueError("Menu item not matched")
+        update_menu_item = session.query(AbstractMenuItem).filter(AbstractMenuItem.id == menu_item.id).first()
+        if update_menu_item is None:
+            raise ValueError("Menu item does not exist")
 
+        update_menu_item.copy(menu_item)
+
+        session.commit()
+        session.close()
 
 
 
