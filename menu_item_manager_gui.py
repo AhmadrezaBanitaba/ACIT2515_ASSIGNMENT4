@@ -5,6 +5,7 @@ from add_food_popup import AddFoodPopup
 from add_drink_popup import AddDrinkPopup
 from remove_menu_item_popup import RemoveMenuItemPopup
 from update_food_popup import UpdateMenuItemPopup
+from update_drink_popup import UpdateDrinkPopup
 
 class MainAppController(tk.Frame):
     """ Main Application for GUI """
@@ -22,7 +23,8 @@ class MainAppController(tk.Frame):
         tk.Button(self, text="Add Drink", command=self._add_drink).grid(row=3, column=2)
         tk.Button(self, text="Remove Menu Item", command=self._remove_menu_item,  fg="red").grid(row=3, column=3)
         tk.Button(self, text="Update Food Item", command=self._update_food).grid(row=3, column=4)
-        tk.Button(self, text="Quit", command=self._quit_callback).grid(row=4, column=2)
+        tk.Button(self, text="Update Drink Item", command=self._update_drink).grid(row=4, column=4)
+        tk.Button(self, text="Quit", command=self._quit_callback).grid(row=5, column=2)
 
         self._update_menu_items_list()
         self._menu_item_stats()
@@ -40,10 +42,14 @@ class MainAppController(tk.Frame):
 
 
     def _update_food(self):
-        """ Updates the selected food """
+        """ Updates food """
         self._popup_win = tk.Toplevel()
         self._popup = UpdateMenuItemPopup(self._popup_win, self._close_food_cb)
 
+    def _update_drink(self):
+        """ Updates drink """
+        self._popup_win = tk.Toplevel()
+        self._popup = UpdateDrinkPopup(self._popup_win, self._close_drink_cb)
 
 
     def _remove_menu_item(self):
