@@ -126,13 +126,12 @@ class Testmanager(unittest.TestCase):
         self.kashmir_dosa.add_menu_item(self.barley_bread)
         self.kashmir_dosa.add_menu_item(self.mango_lasi3)
 
-        mango_lasi = Drink("mango lasi", 8, datetime.datetime.now(), 6.99, 80, "lasi producer ltd", 129.99, False,
+        mango_lasi = Drink("mango lasi5", 8, datetime.datetime.now(), 6.99, 80, "lasi producer ltd", 129.99, False,
                            False)
 
-        mango_lasi.set_id(1)
+        self.kashmir_dosa.update(2, mango_lasi)
 
-        self.kashmir_dosa.update(mango_lasi)
-
+        self.assertEqual(self.kashmir_dosa.get_all()[1], "mango lasi5")
 
     def test_get_menu_item_stats(self):
 
@@ -149,20 +148,6 @@ class Testmanager(unittest.TestCase):
         stats = self.kashmir_dosa.get_menu_item_stats()
         stats_dict = stats.to_dict()
         self.assertEqual(stats_dict['_total_num_menu_items'], 3)
-
-
-    def test_path(self):
-        """  tests for parameter validation on the filepath parameter """
-        pass
-
-
-    def test_read_menu_from_file(self):
-        """ Tests read menu_from_file"""
-        pass
-
-    def test_write_menu_to_file(self):
-        """ Tests write menu_to_file"""
-        pass
 
     def tearDown(self):
         """ Create a test fixture after each test method is run """
