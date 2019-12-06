@@ -16,7 +16,7 @@ class MenuItemManager:
         if db_name is None or db_name == "":
             raise ValueError("DB Name cannot be undefined")
         engine = create_engine("sqlite:///" + db_name)
-        self._db_session = sessionmaker(bind=engine)
+        self._db_session = sessionmaker(bind=engine, expire_on_commit=False)
 
 
     def add_menu_item(self, menu_item):
@@ -116,25 +116,50 @@ class MenuItemManager:
         return menu_list
 
 
-    def update(self, menu_item):
+    def update(self, id, menu_item):
         """ updates menu item """
 
             
         if menu_item is None or not isinstance(menu_item, AbstractMenuItem):
             raise ValueError("Invalid Menu Item Object")
-        
+
         session = self._db_session()
 
-        update_menu_item = session.query(AbstractMenuItem).filter(AbstractMenuItem.id == menu_item.id).first()
-        if update_menu_item is None:
-            raise ValueError("Menu item does not exist")
+        if self.menu_exist(id) is True:
+            menu_item_update = session.query(AbstractMenuItem).filter(AbstractMenuItem.id == id).first()
+            if menu_item_update.type == 'food':
+                session.query(Food).filter(Food.id == id).update({'menu_item_name': menu_item.menu_item_name,
+                                                                                          'menu_item_no': menu_item.menu_item_no,
+                                                                                          'date_added': menu_item.date_added,
+                                                                                          'price': menu_item.price,
+                                                                                          'calories': menu_item.calories,
+                                                                                          'cuisine_country': menu_item.cuisine_country,
+                                                                                          'main_ingredient': menu_item.main_ingredient,
+                                                                                          'portion_size': menu_item.portion_size,
+                                                                                          'is_vegetarian': menu_item.is_vegetarian,
+                                                                                          'type': 'food'
 
-        update_menu_item.copy(menu_item)
 
-        session.commit()
-        session.close()
+                                                                                          })
+
+                session.commit()
+                session.close()
+            if menu_item_update.type == 'drink':
+                session.query(Drink).filter(Drink.id == id).update({'menu_item_name': menu_item.menu_item_name,
+                                                                                          'menu_item_no': menu_item.menu_item_no,
+                                                                                          'date_added': menu_item.date_added,
+                                                                                          'price': menu_item.price,
+                                                                                          'calories': menu_item.calories,
+                                                                                          'manufacturer': menu_item.manufacturer,
+                                                                                          'size': menu_item.size,
+                                                                                          'is_fizzy': menu_item.is_fizzy,
+                                                                                          'is_hot': menu_item.is_hot,
+                                                                                          'type': 'drink'
 
 
+                                                                                          })
+                session.commit()
+                session.close()
 
     def get_menu_item_stats(self):
 

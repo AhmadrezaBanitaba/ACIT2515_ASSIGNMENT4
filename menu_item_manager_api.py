@@ -197,35 +197,25 @@ def update_menu_item(id):
     """ updates an existing menu item """
     content = request.json
 
-    if id <= 0:
-        response = app.response_class(
-            status=400
-        )
-        return response
     try:
         for item in content:
             if content['type'] == 'food':
-                menu_item = Food(content['menu_item_name'], content['menu_item_no'], (content['date_added']), content['price'],
+                menu_item = Food(content['menu_item_name'], content['menu_item_no'], datetime.strptime(content['date_added'], '%Y-%m-%d'), content['price'],
                 content['calories'], content['cuisine_country'], content['main_ingredient'], content['portion_size'], content['is_vegetarian'])
-                menu_item.set_id(id)
-                menu_item_manager.update(menu_item)
+                menu_item_manager.update(id, menu_item)
             elif content['type'] == 'drink':
-                menu_item = Drink(content['menu_item_name'], content['menu_item_no'], content['date_added'], content['price'], content['calories'], content['manufacturer'], content['size'], content['is_fizzy'], content['is_hot'])
-                menu_item.set_id(id)
-                menu_item_manager.update(menu_item)
-
+                menu_item = Drink(content['menu_item_name'], content['menu_item_no'], datetime.strptime(content['date_added'], '%Y-%m-%d'), content['price'], content['calories'], content['manufacturer'], content['size'], content['is_fizzy'], content['is_hot'])
+                menu_item_manager.update(id, menu_item)
 
         response = app.response_class(
             status=200
-        )
-    except ValueError as e:
-        status_code = 400
-        if str(e) == "Menu Item does not exist":
-            status_code = 404
 
+        )
+
+    except ValueError as e:
         response = app.response_class(
             response=str(e),
-            status=status_code
+            status=400
         )
 
     return response
