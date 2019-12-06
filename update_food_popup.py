@@ -5,7 +5,7 @@ import re
 
 
 class UpdateMenuItemPopup(tk.Frame):
-    """ Popup Frame to Add food """
+    """ Popup Frame to Update food """
 
     def __init__(self, parent, close_callback):
         """ Constructor """
