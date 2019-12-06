@@ -111,4 +111,3 @@ if __name__ == "__main__":
     root = tk.Tk()
     MainAppController(root).pack(side=tk.TOP, fill=tk.BOTH, expand=True)
     root.mainloop()
-
